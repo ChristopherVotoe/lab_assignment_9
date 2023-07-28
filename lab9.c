@@ -55,7 +55,6 @@ int parseData(char *inputFileName, struct RecordType **ppData)
 	return dataSz;
 }
 
-// prints the records
 void printRecords(struct RecordType pData[], int dataSz)
 {
 	printf("\nRecords:\n");
@@ -66,7 +65,6 @@ void printRecords(struct RecordType pData[], int dataSz)
 	printf("\n\n");
 }
 
-// Initialize the hash table
 struct HashType *initializeHashTable()
 {
 	struct HashType *pHash = (struct HashType *)malloc(sizeof(struct HashType));
@@ -86,19 +84,17 @@ struct HashType *initializeHashTable()
 	return pHash;
 }
 
-// Insert a record into the hash table
 void insertRecord(struct HashType *pHash, struct RecordType *pRecord)
 {
 	int index = hash(pRecord->id);
 	while (pHash->buckets[index] != NULL)
 	{
-		index = (index + 1) % SIZE; // Linear probing to handle collisions
+		index = (index + 1) % SIZE;
 	}
 
 	pHash->buckets[index] = pRecord;
 }
 
-// Display records in the hash structure
 void displayRecordsInHash(struct HashType *pHash, int hashSz)
 {
 	printf("\nRecords in the hash table:\n");
@@ -120,23 +116,16 @@ int main(void)
 	recordSz = parseData("input.txt", &pRecords);
 	printRecords(pRecords, recordSz);
 
-	// Initialize the hash table
 	struct HashType *pHash = initializeHashTable();
 
-	// Insert each record into the hash table
 	for (int i = 0; i < recordSz; ++i)
 	{
 		insertRecord(pHash, &pRecords[i]);
 	}
-
-	// Display records in the hash table
 	displayRecordsInHash(pHash, SIZE);
-
-	// Free memory for the hash table
 	free(pHash->buckets);
 	free(pHash);
 
-	// Free memory for the record data
 	free(pRecords);
 
 	return 0;
